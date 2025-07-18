@@ -1,7 +1,7 @@
 from openai import OpenAI
 import io
 import contextlib
-client = OpenAI(api_key="sk-UZdaQuqB7BwuwlOhQawLgePMCdbEOPrUrafibnJJ3M3P4DLt", base_url="https://api.moonshot.cn/v1")
+client = OpenAI(api_key="sk-", base_url="https://api.moonshot.cn/v1")
 
 
 def run_python_code(code: str):
