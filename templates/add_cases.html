@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+导入测试用例 - 测试管理平台
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">⬆️ 导入测试用例</h1>
+
+<div class="row">
+    <div class="col-lg-7">
+        <form action="{{ url_for('add_cases') }}" method="post">
+            <div class="mb-3">
+                <label for="user_story" class="form-label">选择要关联的用户故事</label>
+                <select class="form-select" id="user_story" name="user_story" required>
+                    <option value="" disabled selected>请选择一个用户故事...</option>
+                    {% for project in grouped_user_stories %}
+                        <optgroup label="📂 {{ project.project_name }}">
+                            {% for module in project.modules %}
+                                <optgroup label="&nbsp;&nbsp;📁 {{ module.module_name }}">
+                                    {% for us in module.user_stories %}
+                                        <option value="{{ us.id }}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;📄 {{ us.title }}
+                                        </option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+                
+            </div>
+            <div class="mb-3">
+                <label for="json_input" class="form-label">粘贴 JSON 数据</label>
+                <textarea class="form-control" id="json_input" name="json_input" rows="15" required placeholder="请在此处粘贴JSON格式的测试用例数组..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">开始导入</button>
+        </form>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                JSON 格式示例
+            </div>
+            <div class="card-body">
+                <p class="card-text small">请提供一个包含测试用例对象的 JSON 数组。以下是一个对象的示例结构：</p>
+                <pre class="bg-light p-2 rounded small"><code>[
+  {
+    "Case No.": "TC-LOGIN-001",
+    "Priority": "High",
+    "Module": "用户认证",
+    "Function": "登录功能",
+    "Test Case Name": "验证有效凭据登录",
+    "User Role": "普通用户",
+    "Precondition": "用户已注册且未登录",
+    "Test Steps": [
+      "1. 打开登录页面",
+      "2. 输入有效的用户名",
+      "3. 输入有效的密码",
+      "4. 点击登录按钮"
+    ],
+    "Expected Result": [
+      "成功登录并跳转到用户首页"
+    ],
+    "Actual Result": "",
+    "Basis for case preparation": "需求文档 v1.2",
+    "Remark": "",
+    "Create By": "张三",
+    "Create Date": "2023-10-27",
+    "Executed BY": "",
+    "Execution Date": ""
+  }
+]</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

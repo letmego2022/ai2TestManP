@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+项目列表 - {{ super() }}
+{% endblock %}
+
+{% block content %}
+<!-- 页面标题和操作按钮 -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">📁 项目列表</h1>
+    <a href="{{ url_for('add_project') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> 添加新项目
+    </a>
+</div>
+
+<!-- 项目列表 (这段是你之前添加了删除功能的版本) -->
+<div class="list-group">
+    {% for project in projects %}
+    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <a href="{{ url_for('view_project', project_id=project.id) }}" class="text-decoration-none text-dark fw-bold">
+            <i class="bi bi-folder2-open me-2"></i>{{ project.name }}
+        </a>
+        <div class="d-flex align-items-center">
+            <span class="badge bg-primary rounded-pill me-3">{{ project.modules|length }} 模块</span>
+            <form action="{{ url_for('delete_project', project_id=project.id) }}" method="POST" class="d-inline" onsubmit="return confirm('警告：确定要删除项目 \'{{ project.name }}\' 吗？此操作将删除该项目下的所有模块、用户故事和测试用例，且无法恢复！');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash-fill"></i> 删除
+                </button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="list-group-item text-center p-4">
+        <p class="mb-2 text-muted">当前没有项目。</p>
+        <p>点击右上角的 "<strong>添加新项目</strong>" 按钮来创建你的第一个项目吧！</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

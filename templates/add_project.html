@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>添加新项目</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+    <div class="container">
+        <h2 class="mb-4">➕ 添加新项目</h2>
+
+        <form action="{{ url_for('add_project') }}" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">项目名称</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">返回首页</a>
+        </form>
+    </div>
+</body>
+</html>

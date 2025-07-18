@@ -1,0 +1,41 @@
+<!-- templates/project_testcases.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>项目：{{ project.name }} 的所有测试用例</h2>
+    <a href="{{ url_for('download_project_testcases', project_id=project.id) }}" class="btn btn-success mb-3">下载为 Excel</a>
+    <table class="table table-bordered table-hover table-sm">
+        <thead class="table-light">
+          <tr>
+            <th>用例编号</th>
+            <th>测试标题</th>
+            <th>用户故事</th>
+            <th>模块</th>
+            <th>功能点</th>
+            <th>优先级</th>
+            <th>创建人</th>
+            <th>执行人</th>
+            <th>测试步骤</th>
+            <th>预期结果</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tc, us in testcases %}
+          <tr>
+            <td>{{ tc.case_no }}</td>
+            <td>{{ tc.title }}</td>
+            <td>{{ us.title }}</td>
+            <td>{{ tc.module_name }}</td>
+            <td>{{ tc.function }}</td>
+            <td>{{ tc.priority }}</td>
+            <td>{{ tc.create_by }}</td>
+            <td>{{ tc.executed_by or '-' }}</td>
+            <td style="white-space: pre-wrap;">{{ tc.steps }}</td>
+            <td style="white-space: pre-wrap;">{{ tc.expected_result }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+</div>
+{% endblock %}

@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ userstory.title }} - 测试用例 - 测试管理平台
+{% endblock %}
+
+{% block head_extra %}
+<style>
+    .test-case-details dt {
+        font-weight: bold;
+        color: #555;
+    }
+    .test-case-details dd {
+        margin-left: 0;
+        margin-bottom: 0.75rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    .chat-box {
+        height: 70vh;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 0.5rem;
+    }
+    .chat-message {
+        margin-bottom: 0.75rem;
+        white-space: pre-wrap; /* 允许AI回复换行 */
+        word-wrap: break-word;
+    }
+    .chat-message.ai {
+        text-align: left;
+        color: #0d6efd;
+    }
+    .chat-message.user {
+        text-align: right;
+        color: #212529;
+    }
+    .thinking::after {
+        content: '...';
+        display: inline-block;
+        animation: ellipsis 1.25s infinite;
+    }
+    @keyframes ellipsis {
+        0% { content: '.'; }
+        33% { content: '..'; }
+        66% { content: '...'; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">首页</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('view_project', project_id=userstory.module.project.id) }}">{{ userstory.module.project.name }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('view_module', module_id=userstory.module.id) }}">{{ userstory.module.name }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ userstory.title | truncate(30) }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <!-- 左侧：测试用例 -->
+    <div class="col-md-8">
+        <div class="card bg-light mb-4">
+            <div class="card-body">
+                <h1 class="h2 card-title mb-0">{{ userstory.title }}</h1>
+                <hr>
+                <p class="card-text text-muted mb-0">{{ userstory.description or '此用户故事没有详细描述。' }}</p>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4">🧪 测试用例 ({{ userstory.test_cases|length }})</h2>
+        </div>
+
+        <div class="accordion" id="testCaseAccordion">
+            {% for tc in userstory.test_cases %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-{{ tc.id }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ tc.id }}" aria-expanded="false" aria-controls="collapse-{{ tc.id }}">
+                        <span class="fw-bold me-3">{{ tc.case_no }}</span>
+                        <span class="flex-grow-1">{{ tc.title }}</span>
+                        <span class="badge {% if tc.priority.lower() == 'high' %} bg-danger {% elif tc.priority.lower() == 'medium' %} bg-warning text-dark {% else %} bg-secondary {% endif %} me-3">{{ tc.priority }}</span>
+                    </button>
+                </h2>
+                <div id="collapse-{{ tc.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ tc.id }}" data-bs-parent="#testCaseAccordion">
+                    <div class="accordion-body test-case-details">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <dl>
+                                    <dt>功能</dt><dd>{{ tc.function or 'N/A' }}</dd>
+                                    <dt>用户角色</dt><dd>{{ tc.user_role or 'N/A' }}</dd>
+                                    <dt>前提条件</dt><dd>{{ tc.precondition or 'N/A' }}</dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl>
+                                    <dt>创建人 / 日期</dt><dd>{{ tc.create_by or 'N/A' }} / {{ tc.create_date.strftime('%Y-%m-%d') if tc.create_date else 'N/A' }}</dd>
+                                    <dt>执行人 / 日期</dt><dd>{{ tc.executed_by or 'N/A' }} / {{ tc.execution_date.strftime('%Y-%m-%d') if tc.execution_date else 'N/A' }}</dd>
+                                    <dt>用例依据</dt><dd>{{ tc.basis or 'N/A' }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <hr>
+                        <dl>
+                            <dt>测试步骤</dt><dd>{{ tc.steps }}</dd>
+                            <dt>预期结果</dt><dd>{{ tc.expected_result }}</dd>
+                            <dt>实际结果</dt><dd>{{ tc.actual_result or '未执行' }}</dd>
+                            <dt>备注</dt><dd>{{ tc.remark or '无' }}</dd>
+                        </dl>
+                        <div class="mt-3 text-end">
+                            <form action="{{ url_for('delete_test_case', test_case_id=tc.id) }}" method="post" onsubmit="return confirm('您确定要永久删除测试用例 \'{{ tc.case_no }}\' 吗？此操作不可逆！');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> 删除此用例
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="card">
+                <div class="card-body text-center p-4">
+                    <p class="mb-2 text-muted">此用户故事下还没有关联的测试用例。</p>
+                    <p>您可以前往 <a href="{{ url_for('add_cases') }}">导入用例</a> 页面，选择此用户故事并导入数据。</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+     <!-- 右侧：AI 对话框 -->
+     <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                🤖 AI 助手
+            </div>
+            <div class="card-body">
+                <div class="chat-box mb-3" id="chatBox">
+                    <!-- 对话内容 -->
+                    <div class="chat-message ai">你好，我是你的测试助手，有什么想了解的？</div>
+                </div>
+                <form id="chatForm" onsubmit="sendMessage(event)">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="userInput" placeholder="请输入问题..." required autocomplete="off">
+                        <button class="btn btn-primary" type="submit" id="sendButton">发送</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function sendMessage(event) {
+        event.preventDefault();
+        const input = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const message = input.value.trim();
+        if (!message) return;
+
+        const chatBox = document.getElementById('chatBox');
+
+        // 禁用输入框和按钮
+        input.disabled = true;
+        sendButton.disabled = true;
+
+        // 1. 添加用户消息到聊天框
+        const userMsg = document.createElement('div');
+        userMsg.className = 'chat-message user';
+        userMsg.textContent = message;
+        chatBox.appendChild(userMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        
+        // 清空输入框
+        input.value = '';
+
+        // 2. 创建一个空的AI消息容器，并添加"思考中"的样式
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'chat-message ai thinking';
+        aiMsg.textContent = ''; // 初始为空
+        chatBox.appendChild(aiMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+
+        // 构造要发送的消息
+        const messages = [
+            { role: "user", content: message }
+        ];
+
+        try {
+            // 3. 发起fetch请求，并要求流式传输
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // 关键：将 stream 设置为 true
+                body: JSON.stringify({ 
+                    messages: messages, 
+                    stream: true, 
+                    userstory_id: {{ userstory.id }}
+                }) 
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // 4. 处理流式响应
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let firstChunk = true;
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    break; // 流结束
+                }
+                
+                // 解码收到的数据块 (Uint8Array)
+                const chunk = decoder.decode(value, { stream: true });
+
+                // 如果是第一个数据块，移除 "思考中" 的样式
+                if (firstChunk) {
+                    aiMsg.classList.remove('thinking');
+                    firstChunk = false;
+                }
+                
+                // 将新的文本块追加到AI消息内容中
+                aiMsg.textContent += chunk;
+
+                // 实时滚动到聊天框底部
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            aiMsg.classList.remove('thinking');
+            aiMsg.textContent = "抱歉，请求出错了。请检查后台日志。";
+            aiMsg.style.color = 'red';
+        } finally {
+            // 5. 请求结束后，无论成功与否，都重新启用输入框和按钮
+            input.disabled = false;
+            sendButton.disabled = false;
+            input.focus(); // 将焦点放回输入框
+        }
+    }
+</script>
+{% endblock %}

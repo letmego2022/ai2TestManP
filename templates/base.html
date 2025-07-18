@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 1. 使用一个可变的 block 来定义标题 -->
+    <title>{% block title %}测试管理平台{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        main {
+            flex: 1; /* 确保 main 内容区域会填满剩余空间 */
+        }
+    </style>
+    <!-- 2. 为特定的页面预留一个可以添加额外 head 内容的 block -->
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+    <!-- 顶部导航栏 (公共部分) -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('index') }}">
+                    <i class="bi bi-robot"></i> 测试管理平台
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}"><i class="bi bi-house-door"></i> 项目首页</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('add_project') }}"><i class="bi bi-plus-circle"></i> 添加项目</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('add_cases') }}"><i class="bi bi-file-earmark-arrow-up"></i> 导入用例</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="{{ url_for('init_db') }}" onclick="return confirm('确定要清空并初始化所有数据吗？此操作不可逆！');">
+                                <i class="bi bi-arrow-clockwise"></i> 初始化数据
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主体内容区域 (这是将要被子模板填充的部分) -->
+    <main class="container my-5">
+        
+        <!-- Flash 消息显示区域 (放在这里，所有页面都能显示) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- 3. 定义一个名为 'content' 的 block，子模板将把内容填充到这里 -->
+        {% block content %}{% endblock %}
+
+    </main>
+
+    <!-- 页脚 (公共部分) -->
+    <footer class="mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">© {{ now.year }} 测试管理平台.</span>
+        </div>
+    </footer>
+
+    <!-- 公共的 JS 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 4. 为特定的页面预留一个可以添加额外 script 的 block -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>
