@@ -12,16 +12,15 @@
 ### 并联式设计图
 ```mermaid
 flowchart LR
-    subgraph Maker Group
-        A[Positive Case Agent]
-        B[Boundary Value Analyst]
-        C[Error Guessing Specialist]
-        D[State Machine Attacker]
-    end
-    Input[用户故事 / 需求] --> Maker Group
-    Maker Group --> Output[测试用例集合]
-
-
+  subgraph MakerGroup["Maker Group"]
+    A[Positive Case Agent]
+    B[边界值分析师 (Boundary Value Analyst)]
+    C[错误场景推演师 (Error Guessing Specialist)]
+    D[状态机攻击手 (State Machine Attacker)]
+  end
+  Input[用户故事 / 需求] --> MakerGroup
+  MakerGroup --> Output[测试用例集合]
+```
 ## ✨ 平台特色功能
 
 | 功能模块      | 描述                                      |
