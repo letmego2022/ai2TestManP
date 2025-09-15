@@ -10,17 +10,7 @@
 - **状态机攻击手 (State Machine Attacker)**：负责生成复杂状态转换、越权与非法路径的攻击类用例。  
 
 ### 并联式设计图
-```mermaid
-flowchart LR
-  subgraph MakerGroup["Maker Group"]
-    A[Positive Case Agent]
-    B[边界值分析师 (Boundary Value Analyst)]
-    C[错误场景推演师 (Error Guessing Specialist)]
-    D[状态机攻击手 (State Machine Attacker)]
-  end
-  Input[用户故事 / 需求] --> MakerGroup
-  MakerGroup --> Output[测试用例集合]
-```
+
 ## ✨ 平台特色功能
 
 | 功能模块      | 描述                                      |
