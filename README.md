@@ -1,3 +1,26 @@
+# 第二阶段升级设计
+
+在第一阶段中，本项目基于单个 **测试用例生成 Maker** 进行工作。  
+在第二阶段，我们将架构升级为 **Maker 组** —— 采用 **并联式设计**，由多个 Agent 协作生成不同维度的测试用例。  
+
+### 架构说明
+- **Positive Case Agent**：负责生成正常流程下的正向用例。  
+- **边界值分析师 (Boundary Value Analyst)**：负责生成边界值相关的测试用例。  
+- **错误场景推演师 (Error Guessing Specialist)**：负责生成各种输入错误、异常操作的测试用例。  
+- **状态机攻击手 (State Machine Attacker)**：负责生成复杂状态转换、越权与非法路径的攻击类用例。  
+
+### 并联式设计图
+```mermaid
+flowchart LR
+    subgraph Maker Group
+        A[Positive Case Agent]
+        B[Boundary Value Analyst]
+        C[Error Guessing Specialist]
+        D[State Machine Attacker]
+    end
+    Input[用户故事 / 需求] --> Maker Group
+    Maker Group --> Output[测试用例集合]
+
 # 平台2：🧪 测试管理平台 Test Management Platform
 
 一个轻量级、结构清晰、支持 AI 辅助的测试用例管理平台，旨在帮助团队高效地组织用户故事、模块、测试用例，并集成 AI 助手快速分析与问答。
