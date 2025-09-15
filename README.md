@@ -21,11 +21,6 @@ flowchart LR
     Input[用户故事 / 需求] --> Maker Group
     Maker Group --> Output[测试用例集合]
 
-# 平台2：🧪 测试管理平台 Test Management Platform
-
-一个轻量级、结构清晰、支持 AI 辅助的测试用例管理平台，旨在帮助团队高效地组织用户故事、模块、测试用例，并集成 AI 助手快速分析与问答。
-
----
 
 ## ✨ 平台特色功能
 
