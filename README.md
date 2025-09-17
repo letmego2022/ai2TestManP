@@ -2,6 +2,9 @@
 
 在第一阶段中，本项目基于单个 **测试用例生成 Maker** 进行工作。  
 在第二阶段，我们将架构升级为 **Maker 组** —— 采用 **并联式设计**，由多个 Agent 协作生成不同维度的测试用例。  
+- 实现maker组，多维度的提升测试用例的覆盖率
+<img width="1547" height="679" alt="image" src="https://github.com/user-attachments/assets/51019305-6483-4f46-beae-371c088d19f6" />
+
 
 ### 架构说明
 - **Positive Case Agent**：负责生成正常流程下的正向用例。  
