@@ -2,6 +2,9 @@
 
 在第一阶段中，本项目基于单个 **测试用例生成 Maker** 进行工作。  
 在第二阶段，我们将架构升级为 **Maker 组** —— 采用 **并联式设计**，由多个 Agent 协作生成不同维度的测试用例。  
+- 现实中标准的用户故事还是非常少的，所以需要借助AI引导用户，生成高质量的用户故事
+<img width="1785" height="799" alt="image" src="https://github.com/user-attachments/assets/335fa852-8fb0-477d-9cbe-c4bb6432e162" />
+
 - 实现maker组，多维度的提升测试用例的覆盖率
 <img width="1547" height="679" alt="image" src="https://github.com/user-attachments/assets/51019305-6483-4f46-beae-371c088d19f6" />
 
