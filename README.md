@@ -8,7 +8,7 @@
 ## 🎥 核心功能演示
 
 点击下方视频，快速了解VisionAgent-Test如何通过自然语言指令，智能地理解UI界面并完成自动化操作。
-[![VisionAgent-Test 演示视频](./assets/video_cover.png)](https://www.bilibili.com/video/BV1wnJXzJEny/)
+[![VisionAgent-Test 演示视频](./static/video_cover.png)](https://www.bilibili.com/video/BV1wnJXzJEny/)
 
 ---
 
