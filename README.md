@@ -134,3 +134,7 @@ Project 1---* Module 1---* UserStory 1---* (TestCase + AutomatedScript)
 -   一个**项目**包含多个**模块**。
 -   一个**模块**下有多个**用户故事**（User Story）。
 -   每个**用户故事**关联多个**测试用例**（Test Case）和一个或多个**自动化脚本**（Automated Script）。
+同技术路线 flows测试简易报告：
+<img width="2525" height="15116" alt="image" src="https://github.com/user-attachments/assets/e0055c13-62b5-4880-ae91-33413dfc9831" />
+<img width="2525" height="6010" alt="image" src="https://github.com/user-attachments/assets/aa9aba89-0eb2-4876-89c7-18e1b770506b" />
+
